@@ -1,0 +1,153 @@
+
+CS441G Fall 2014 Handout for Final Project
+
+QUESTIONS/TASKS BEFORE TUESDAY, 25 November 2014, class
+
+0) download FinalProjectStageA-cs441f14.tar from our Web page (in Programming)
+	- untar
+	- inspect all the files with ls, file and vim commands
+	- read README (look for TODO)
+	- inspect the Makefile
+	- make
+	- execute pass2i on the sample pass programs: e.g., pass2i < sample-euler.pass
+
+1) submit as hw8 via the Web submission system the following information (one per team) in one (possibly tar or zip) file:
+	- the members of your team: names and email addresses
+	- your own program in the pass language: follow the syntax of examples in the handout
+		(try to write a program that does something meaningful and interesting): name the program with your initials with the extension "pass"
+	- compile and execute your program with pass2i intepreter: include transcript of your session (use Unix "script")
+
+=== Stage A Scope ===
+
+Stage A of this project adds extended functionality to the lexer and parser. 
+Primary focus of this stage was given to lexical and syntax analysis. 
+This was shown in the form of adding a symbol table as well as accounting for float variables. 
+
+=====OBJECTIVES=====
+We can use this file to keep track of who's doing what.
+
+Syntax:
+[abc] initials:               claimed, wip
+[ABC] UPPERCASE INITIALS:     completed
+        abc: comment
+        cde: more comment
+
+
+=== MILESTONE A  ===
+
+[---] C++ style variable names
+        rgc: done in class
+
+[RGC] Symbol table one level 
+        rgc: I think this was what started in class and part of it was put in Patch 4, but I think I finished it...?
+
+[RGC] Declarations for float variables.
+
+[RGC] C++ and C style comments - single and multiple line
+        rgc: single line done. need to copy multiple line thing from program 2
+
+[---] Recognition of block syntax.
+        rgc: done in class
+
+[---] Semantic analysis - undeclared, multiple declarations
+        rgc: provided in patch 4 from Dr. J
+
+[---] do-while and do-until loops  -- TASK TO PREPARE FOR TUESDAY NOVEMBER 25, 2014 (JWJ)
+        rgc: done in class
+
+[JAW] Documentation for Milestone A
+
+
+=== MILESTONE B  ===
+
+[RGC] Declarations for int variables
+        rgc: kind of hard to resist doing this with declaration of floats
+	rgc: modified to allow int declarations only on LHS
+
+[RGC] Declarations for int and float constants
+        rgc: attempted implementation, floats UNTESTED but *should* work
+	rgc: added inline declarations (int n=5). float declarations work
+	rgc: switched to use a double data type struct. dataType can be either TYPE_INT or TYPE_DOUBLE (type) 
+		and contains data in _int or _double
+	rgc: type casting should work properly now as well, intermediate calculations are performed as double where necessary.
+
+[   ] Symbol tables for scopes/multiple blocks
+
+[rgc] C++ style for
+        rgc: untested, but basic structure is written in
+
+[rgc] Semantic analysis - assigning to a constant, type checking
+	rgc: check for assigning to a constant implemented within calc3a.c
+	rgc: what kind of type checking for RHS needed?
+
+[jaw] Documentation for Milestone B
+
+===== BUGS/LIMITATIONS/TODO =====
+----- Implement symbol tables for multiple scopes
+----- Junk input handled correctly but should throw an error upon encountering newline
+----- Order of operations not handled
+
+===== ADDITIONAL FEATURES ======
+----- Explicit typecasting: force a variable to either int or double.
+	i.e. "(int) n" or "(double) m"
+----- When handling calculations between type int and double, double precision is maintained in the calculations
+
+
+===== CHANGES FROM PROVIDED CODE =====
+
+In file:
+
+ calc3.l
+-Reserved words for int and float/double types
+-Assigned line number to increment when encountering a newline
+-Added recognition of C and C++ style single and multi-line comments
+-Added "for" loop support // JWJ: TODO test for loop and correct
+-Added block syntax support
+
+calc3.y
+-Added id nodetype with a type
+-Added int and float/double tokens and expressions
+-Added floating point constant function
+-Added a one level scope symbol table
+-Added block syntax support
+
+calc3a.c
+-Changed return type to dataType, which can be either float or int
+-Added a "typecast of floating point double to int" case 
+-Made vars inherit type from idnode type in "typeIdInit" case
+-Throws an error if sees undeclared var
+-cases defined so that if operands are not both "int" a binary calculation is performed
+ with the full precision of a "double"
+-Print command prints appropriately for TYPE_INT and TYPE_DOUBLE
+
+calc3.h
+-Added typeIdInit,TYPE_INT,TYPE_DOUBLE enums
+-Added floating point constants
+-Added a dataType struct with a (double,int) union to allow for mixed types to be handed with one variable.
+-dataType has a type flag that is TYPE_INT or TYPE_DOUBLE (uses same enum)
+
+===== TESTING =====
+
+----- Testing files: -----
+sample-comment-double.cal
+sample-beginend.cal
+sample-euler.cal
+sample.euler2.cal
+sample-bad-block.cal
+
+Do-While loop tested using sample3-dowhile.cal - bad case provided to ensure proper error handling
+Comments tested (in-line, single and multi line comments are tested using variety of cases in executable)
+Some example tests:
+
+//sldksldfj
+/* sdlfkjsdlfj
+jdlkjf*/ int n=5;
+print n;
+/*lsdlkfjsdlfkj
+slkjdflskjdf*/
+int n=5;
+print n;
+
+sample4.cal also used to test comments
+other sample.cal files provided in class were checked to ensure while loops operated correctly and that approrpriate errors were thrown as necessary
+
