@@ -1,0 +1,24 @@
+Script started on Mon 24 Nov 2014 03:28:05 PM EST
+[4mcoreopsis[24m:[1m~/main_copy/CS441G/FinalProjectStageA[0m> make
+bison -y -d calc3.y
+calc3.y: warning: 20 shift/reduce conflicts [-Wconflicts-sr]
+flex calc3.l
+gcc -c y.tab.c lex.yy.c
+g++ -g -c -o symbol_table.o symbol_table.cc
+gcc -g -c -o calc3a.o calc3a.c
+g++ y.tab.o lex.yy.o symbol_table.o calc3a.o -o pass2i
+[4mcoreopsis[24m:[1m~/main_copy/CS441G/FinalProjectStageA[0m> ./pass2i < LW_and_GG.pass 
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+[4mcoreopsis[24m:[1m~/main_copy/CS441G/FinalProjectStageA[0m> exit
+exit
+
+Script done on Mon 24 Nov 2014 03:28:23 PM EST
